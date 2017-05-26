@@ -14,4 +14,10 @@ public interface TaskService {
 	void createTask(Task task);
 	void editTask(Task task);
 	
+	List<Task> findByUserId(int id);
+	
+	void joinToTask(Task task, int id);
+	void exitFromTeam(Task task, int id);
+	Task findPerformersWhoJoin(int id);
+	
 }

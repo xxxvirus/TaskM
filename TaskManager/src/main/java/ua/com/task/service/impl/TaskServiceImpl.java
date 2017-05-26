@@ -7,8 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import ua.com.task.dao.CustomerDao;
+import ua.com.task.dao.PerformerDao;
 import ua.com.task.dao.TaskDao;
 import ua.com.task.entity.Customer;
+import ua.com.task.entity.Performer;
 import ua.com.task.entity.Task;
 import ua.com.task.entity.User;
 import ua.com.task.service.TaskService;
@@ -20,6 +22,8 @@ public class TaskServiceImpl implements TaskService {
 	private TaskDao taskDao;
 	@Autowired
 	private CustomerDao customerDao;
+	@Autowired
+	private PerformerDao performerDao;
 	
 	@Override
 	public void save(Task task) {
@@ -45,9 +49,8 @@ public class TaskServiceImpl implements TaskService {
 	public void createTask(Task task) {
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		Customer customer = new Customer();
-		customer.setUser(user);
-		customerDao.save(customer);
+		int userId = user.getId();
+		Customer customer = customerDao.findOne(userId);
 		task.setCustomer(customer);
 		taskDao.save(task);
 	}
@@ -56,11 +59,42 @@ public class TaskServiceImpl implements TaskService {
 	public void editTask(Task task) {
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		Customer customer = new Customer();
-		customer.setUser(user);
-		customerDao.save(customer);
+		Customer customer = customerDao.findOne(user.getId());
 		task.setCustomer(customer);
+		List<Performer> performers = performerDao.findByTaskId(task.getId());
+		task.setPerformers(performers);
 		taskDao.saveAndFlush(task);
+	}
+
+	@Override
+	public List<Task> findByUserId(int id) {
+		return taskDao.findByUserId(id);
+	}
+
+	@Override
+	public void joinToTask(Task task, int id) {
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		task = taskDao.findOne(id);
+		Performer performer = performerDao.findOne(user.getId());
+		task = taskDao.findPerformersWhoJoin(id);
+		task.getPerformers().add(performer);
+		taskDao.save(task);
+	}
+
+	@Override
+	public Task findPerformersWhoJoin(int id) {
+		return taskDao.findPerformersWhoJoin(id);
+	}
+
+	@Override
+	public void exitFromTeam(Task task, int id) {
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		task = taskDao.findOne(id);
+		task = taskDao.findPerformersWhoJoin(id);
+		task.getPerformers().removeIf(s -> s.getId() == user.getId());
+		taskDao.save(task);
 	}
 
 }

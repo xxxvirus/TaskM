@@ -16,7 +16,6 @@
 	margin-left:15px;
 }
 </style>
-Welcome
 <div class="row">
 	<sec:authorize access="isAuthenticated()">
 	<div class="col-md-12"><a href="/createTask"><button type="button" class="btn btn-danger btn-xs">Create Task</button></a></div>
@@ -36,12 +35,16 @@ Welcome
 	 	<tr>
 	 		<td>${task.date}</td>
 	 		<td><a href="/task/${task.id}">${task.title}</a></td>
-	 		<td>${task.customer.user.name} ${task.customer.user.surname}</td>
+	 		<td><a href="/user/${task.customer.user.id}">${task.customer.user.name} ${task.customer.user.surname}</a></td>
 	 		<sec:authorize access="isAuthenticated()">
 	 		<sec:authentication property="principal.id" var="userId"/>
 			<c:if test="${userId == task.customer.user.id}">
-	 		<td><a class="btn btn-danger btn-xs" href="/deleteTask/${task.id}">delete</a>
+	 		<td><a class="btn btn-primary btn-xs" href="/join/${task.id}">join</a>
+	 		<a class="btn btn-danger btn-xs" href="/deleteTask/${task.id}">delete</a>
 	 		<a class="btn btn-warning btn-xs" href="/editTask/${task.id}">edit</a></td>
+	 		</c:if>
+	 		<c:if test="${userId != task.customer.user.id}">
+	 		<td><a class="btn btn-primary btn-xs" href="/join/${task.id}">join</a></td>
 	 		</c:if>
 	 		</sec:authorize>
 	 	</tr>
@@ -54,7 +57,7 @@ Welcome
 	<div class="col-md-4">
 		<div class="col-md-12 blockNavigation">
 			<div class="row blockNavigationRow">
-				<a href="/member/<sec:authentication property="principal.id" />">My profile</a>
+				<a href="/user/<sec:authentication property="principal.id" />">My profile</a>
 			</div>
 			<div class="row blockNavigationRow">
 				<a href="/member/<sec:authentication property="principal.id" />/friends">My tasks</a>

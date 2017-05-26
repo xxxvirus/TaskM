@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import ua.com.task.entity.Task;
 import ua.com.task.entity.User;
+import ua.com.task.service.PerformerService;
 import ua.com.task.service.TaskService;
 import ua.com.task.service.UserService;
 import ua.com.task.validator.UserValidator;
@@ -31,6 +32,8 @@ public class IndexController {
 	private UserService userService;
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private PerformerService performerService;
 
 	@GetMapping
 	public String index(Principal principal, Model model) {
@@ -97,5 +100,17 @@ public class IndexController {
 		taskService.delete(id);
 		return "redirect:/";
 	}
+	
+	@GetMapping("/join/{id}")
+	public String join(@ModelAttribute("task") Task task, @PathVariable int id){
+		taskService.joinToTask(task, id);
+		return "redirect:/task/{id}";
+	}
+	
+//	@GetMapping("/exit/{id}")
+//	public String exit(@ModelAttribute("task") Task task, @PathVariable int id){
+//		taskService.exitFromTeam(task, id);
+//		return "redirect:/";
+//	}
 
 }

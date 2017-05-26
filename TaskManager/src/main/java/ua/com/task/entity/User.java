@@ -3,7 +3,6 @@ package ua.com.task.entity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -37,11 +36,11 @@ public class User implements UserDetails {
 	@Enumerated
 	@Column(name = "_role")
 	private Role role;
-	
-	@OneToMany(mappedBy="user")
-	private List<Customer> customers = new ArrayList<>();
-	@OneToMany(mappedBy="user")
-	private List<Performer> performers = new ArrayList<>();
+
+	@OneToOne(mappedBy = "user")
+	private Customer customer;
+	@OneToOne(mappedBy = "user")
+	private Performer performer;
 
 	public int getId() {
 		return id;
@@ -113,6 +112,22 @@ public class User implements UserDetails {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Performer getPerformer() {
+		return performer;
+	}
+
+	public void setPerformer(Performer performer) {
+		this.performer = performer;
 	}
 
 	@Override

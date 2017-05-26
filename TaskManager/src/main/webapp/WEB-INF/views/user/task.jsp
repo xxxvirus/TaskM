@@ -19,18 +19,38 @@
 <div class="row">
 	<div class="col-md-8">
 		<div class="row">
-			<div class="col-md-10">
-				<h2>Customer of Task: ${task.customer.user.name} ${task.customer.user.surname}</h2>
+			<div class="col-md-9">
+				<h2>${task.title}</h2>
+				<div>Add at: ${task.date}</div>
+				<div>by <a href="/user/${task.customer.user.id}">${task.customer.user.name} ${task.customer.user.surname}</a></div>
+				<div>Team: 
+					<c:forEach items="${taskPerf.performers}" var="performer">
+						<a href="/user/${performer.user.id}">${performer.user.name} ${performer.user.surname}</a>
+					</c:forEach>
+				</div>
 			</div>
 			<sec:authorize access="isAuthenticated()">
 	 		<sec:authentication property="principal.id" var="userId"/>
+	 			<div class="col-md-1">
+	 			<c:if test="${isImPerformer!=true}">
+	 			<a class="btn btn-primary btn-xs" href="/task/${task.id}/join">join</a> 
+	 			</c:if>
+	 			<c:if test="${isImPerformer==true}">
+	 			<a class="btn btn-danger btn-xs" href="/task/${task.id}/exit">exit</a>
+	 			</c:if>
+	 			</div>
 			<c:if test="${userId == task.customer.user.id}">
-		 		<div class="col-md-1"><a class="btn btn-danger btn-xs" href="/deleteTask/${task.id}">delete</a></div>
-		 		<div class="col-md-1"><a class="btn btn-warning btn-xs" href="/editTask/${task.id}">edit</a></div>
+		 		<div class="col-md-1"><a class="btn btn-danger btn-xs" href="/task/${task.id}/deleteTask">delete</a></div>
+		 		<div class="col-md-1"><a class="btn btn-warning btn-xs" href="/task/${task.id}/editTask">edit</a></div>
 	 		</c:if>
 	 		</sec:authorize>
 		</div>
-		<div class="row"><p>${task.text}</p></div>	 
+		<hr>
+		<div class="row">
+			<div class="col-md-12">
+				<p>${task.text}</p>
+			</div>	 
+		</div>
 	</div>
 	<sec:authorize access="isAuthenticated()">
 	<div class="col-md-4">

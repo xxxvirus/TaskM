@@ -7,8 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Customer {
@@ -16,7 +17,8 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToOne
+	@OneToOne
+	@JoinColumn(name = "user_id")
 	private User user;
 	@OneToMany(mappedBy = "customer")
 	private List<Task> tasks = new ArrayList<>();

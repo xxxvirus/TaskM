@@ -7,7 +7,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ua.com.task.dao.CustomerDao;
+import ua.com.task.dao.PerformerDao;
 import ua.com.task.dao.UserDao;
+import ua.com.task.entity.Customer;
+import ua.com.task.entity.Performer;
 import ua.com.task.entity.Role;
 import ua.com.task.entity.User;
 import ua.com.task.service.UserService;
@@ -18,6 +22,10 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	@Autowired
 	private UserDao userDao;
 	@Autowired
+	private CustomerDao customerDao;
+	@Autowired
+	private PerformerDao performerDao;
+	@Autowired
 	private BCryptPasswordEncoder encoder;
 	
 	@Override
@@ -25,6 +33,12 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		user.setRole(Role.ROLE_USER);
 		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);
+		Customer customer = new Customer();
+		customer.setUser(user);
+		customerDao.save(customer);
+		Performer performer = new Performer();
+		performer.setUser(user);
+		performerDao.save(performer);
 	}
 
 	@Override
@@ -36,6 +50,11 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		return userDao.findByEmail(username);
+	}
+
+	@Override
+	public User findOne(int id) {
+		return userDao.findOne(id);
 	}
 	
 //	@PostConstruct

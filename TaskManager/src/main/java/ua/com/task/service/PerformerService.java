@@ -10,4 +10,7 @@ public interface PerformerService {
 	List<Performer> findAll();
 	Performer findOne(int id);
 	void delete(int id);
+	
+	boolean isIamPerformer(int id);
+//	List<Performer> findByTaskId(int id);
 }
