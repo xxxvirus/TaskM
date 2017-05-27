@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ua.com.task.entity.Task;
 import ua.com.task.service.TaskService;
@@ -36,13 +37,13 @@ public class MyTasksController {
 	}
 
 	@PostMapping("/editTask/{idd}")
-	public String saveTaskEdit(Task task, @PathVariable int id) {
+	public String saveTaskEdit(@ModelAttribute("task") Task task, @PathVariable int id) {
 		taskService.editTask(task);
 		return "redirect:/user/{id}/tasks";
 	}
 
 	@GetMapping("/deleteTask/{idd}")
-	public String deleteTask(@PathVariable int id, @PathVariable int idd) {
+	public String deleteTask(@PathVariable int idd) {
 		taskService.delete(idd);
 		return "redirect:/user/{id}/tasks";
 	}
@@ -56,6 +57,19 @@ public class MyTasksController {
 	@GetMapping("/open/{idd}")
 	public String open(@ModelAttribute("task") Task task, @PathVariable int idd) {
 		taskService.openTask(task, idd);
+		return "redirect:/user/{id}/tasks";
+	}
+	
+	@GetMapping("/share/{idd}")
+	public String share(Model model, @PathVariable int id, @PathVariable int idd){
+		model.addAttribute("task", taskService.findOne(idd));
+		model.addAttribute("users", userService.findOne(id));
+		return "user-share";
+	}
+	
+	@PostMapping("/share/{idd}")
+	public String shareSave(@PathVariable int idd, @RequestParam String email) {
+		taskService.shareTask(idd, email);
 		return "redirect:/user/{id}/tasks";
 	}
 }

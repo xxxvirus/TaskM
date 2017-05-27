@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.com.task.dao.CustomerDao;
 import ua.com.task.dao.PerformerDao;
 import ua.com.task.dao.TaskDao;
+import ua.com.task.dao.UserDao;
 import ua.com.task.entity.Customer;
 import ua.com.task.entity.Performer;
 import ua.com.task.entity.Task;
@@ -24,6 +25,8 @@ public class TaskServiceImpl implements TaskService {
 	private CustomerDao customerDao;
 	@Autowired
 	private PerformerDao performerDao;
+	@Autowired
+	private UserDao userDao;
 
 	@Override
 	public void save(Task task) {
@@ -119,6 +122,21 @@ public class TaskServiceImpl implements TaskService {
 		task = taskDao.findOne(id);
 		task.setDone(false);
 		taskDao.save(task);
+	}
+
+	@Override
+	public void shareTask(int idd, String email) {
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		Customer customer = customerDao.findOne(user.getId());
+		Task task = taskDao.findOne(idd);
+		task.setCustomer(customer);
+		User user2 = userDao.findByEmail(email);
+		Performer performer = performerDao.findOne(user2.getId());
+		List<Performer> performers = performerDao.findByTaskId(task.getId());
+		task.setPerformers(performers);
+		task.getPerformers().add(performer);
+		taskDao.saveAndFlush(task);
 	}
 
 }

@@ -15,6 +15,7 @@ public interface TaskService {
 	
 	void createTask(Task task);
 	void editTask(Task task);
+	void shareTask(int idd, String email);
 	
 	List<Task> findByUserId(int id);
 	List<Task> findByUserIdactive(int id);

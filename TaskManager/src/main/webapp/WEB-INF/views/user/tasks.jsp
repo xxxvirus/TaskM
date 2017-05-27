@@ -46,7 +46,8 @@
 	 			<td><a class="btn btn-danger btn-xs" href="/user/${users.id}/tasks/finish/${task.id}">Uncompleted</a></td>
 	 		</c:if>
 	 		<td><a class="btn btn-danger btn-xs" href="/user/${users.id}/deleteTask/${task.id}">delete</a>
-	 		<a class="btn btn-warning btn-xs" href="/user/${users.id}/editTask/${task.id}">edit</a></td>
+	 		<a class="btn btn-warning btn-xs" href="/user/${users.id}/editTask/${task.id}">edit</a>
+	 		<a class="btn btn-primary btn-xs" href="/user/${users.id}/tasks/share/${task.id}">share</a></td>
 	 		</c:if>
 	 		<c:if test="${userId != task.customer.user.id}">
 	 		<c:if test="${task.done==true}">
