@@ -20,18 +20,29 @@
 }
 </style>
 <div class="row">
+	<div class="col-md-12"><h3>${users.name}'s finished tasks: </h3></div>
 	<div class="col-md-8">
-	 	<div class="row"><h2>${users.name} ${users.surname}</h2></div>
-		<div class="row">
-			<div class="col-md-3 infoRow">Country:</div> <div class="col-md-9">${users.country}</div>
-			<div class="col-md-3 infoRow">City:</div> <div class="col-md-9">${users.city}</div>
-			<div class="col-md-3 infoRow">Email:</div> <div class="col-md-9">${users.email}</div>
-			<div class="col-md-3 infoRow">Phone:</div> <div class="col-md-9">${users.phoneNumber}</div>
-			<div class="col-md-12"><hr></div>
-			<div class="col-md-12"><a href="/user/${users.id}/tasks">${users.name}'s created tasks</a></div>
-			<div class="col-md-12"><a href="/user/${users.id}/active">${users.name}'s active tasks</a></div>
-			<div class="col-md-12"><a href="/user/${users.id}/finished">${users.name}'s completed tasks</a></div>
-		</div>
+	 	<table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Title</th>
+        <sec:authorize access="isAuthenticated()"><th>Option</th></sec:authorize>
+      </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${tasks}" var="task">
+    	<c:if test="${task.done==true}">
+	 	<tr>
+	 		<td>${task.date}</td>
+	 		<td><a href="/task/${task.id}">${task.title}</a></td>
+	 		<td><a class="btn btn-primary btn-xs" href="/task/${task.id}">view</a></td>
+	 	</tr>
+	 	</c:if>
+	 </c:forEach>
+    </tbody>
+  </table>
+  
 	</div>
 	<sec:authorize access="isAuthenticated()">
 	<div class="col-md-4">

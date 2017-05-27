@@ -11,13 +11,18 @@ public interface TaskService {
 	Task findOne(int id);
 	void delete(int id);
 	
+	List<Task> findAllActive();
+	
 	void createTask(Task task);
 	void editTask(Task task);
 	
 	List<Task> findByUserId(int id);
+	List<Task> findByUserIdactive(int id);
 	
 	void joinToTask(Task task, int id);
 	void exitFromTeam(Task task, int id);
+	void finishTask(Task task, int id);
+	void openTask(Task task, int id);
 	Task findPerformersWhoJoin(int id);
 	
 }

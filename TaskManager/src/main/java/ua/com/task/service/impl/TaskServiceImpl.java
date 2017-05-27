@@ -24,7 +24,7 @@ public class TaskServiceImpl implements TaskService {
 	private CustomerDao customerDao;
 	@Autowired
 	private PerformerDao performerDao;
-	
+
 	@Override
 	public void save(Task task) {
 		taskDao.save(task);
@@ -94,6 +94,30 @@ public class TaskServiceImpl implements TaskService {
 		task = taskDao.findOne(id);
 		task = taskDao.findPerformersWhoJoin(id);
 		task.getPerformers().removeIf(s -> s.getId() == user.getId());
+		taskDao.save(task);
+	}
+
+	@Override
+	public List<Task> findByUserIdactive(int id) {
+		return taskDao.findByUserIdactive(id);
+	}
+
+	@Override
+	public void finishTask(Task task, int id) {
+		task = taskDao.findOne(id);
+		task.setDone(true);
+		taskDao.save(task);
+	}
+
+	@Override
+	public List<Task> findAllActive() {
+		return taskDao.findAllActive();
+	}
+
+	@Override
+	public void openTask(Task task, int id) {
+		task = taskDao.findOne(id);
+		task.setDone(false);
 		taskDao.save(task);
 	}
 

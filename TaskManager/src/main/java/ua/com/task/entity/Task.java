@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Task {
@@ -25,11 +26,14 @@ public class Task {
 	private String text;
 	private Date date = new Date();
 	private boolean done;
+
 	@ManyToOne
 	private Customer customer;
 	@ManyToMany
 	@JoinTable(name = "tasks_performers", joinColumns = @JoinColumn(name = "id_task"), inverseJoinColumns = @JoinColumn(name = "id_performer"))
 	private List<Performer> performers = new ArrayList<>();
+	@OneToMany(mappedBy = "task")
+	private List<Report> reports = new ArrayList<>();
 
 	public Task() {
 	}
@@ -88,6 +92,14 @@ public class Task {
 
 	public void setPerformers(List<Performer> performers) {
 		this.performers = performers;
+	}
+
+	public List<Report> getReports() {
+		return reports;
+	}
+
+	public void setReports(List<Report> reports) {
+		this.reports = reports;
 	}
 
 	@Override

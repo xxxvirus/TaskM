@@ -5,7 +5,6 @@ import java.security.Principal;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,12 +36,12 @@ public class IndexController {
 
 	@GetMapping
 	public String index(Principal principal, Model model) {
-		if (principal != null) {
-			System.out.println(principal.getName());
-			SecurityContextHolder.getContext().getAuthentication()
-					.getPrincipal();
-		}
-		model.addAttribute("tasks", taskService.findAll());
+//		if (principal != null) {
+//			System.out.println(principal.getName());
+//			SecurityContextHolder.getContext().getAuthentication()
+//					.getPrincipal();
+//		}
+		model.addAttribute("tasks", taskService.findAllActive());
 		return "user-index";
 	}
 
@@ -101,11 +100,11 @@ public class IndexController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/join/{id}")
-	public String join(@ModelAttribute("task") Task task, @PathVariable int id){
-		taskService.joinToTask(task, id);
-		return "redirect:/task/{id}";
-	}
+//	@GetMapping("/join/{id}")
+//	public String join(@ModelAttribute("task") Task task, @PathVariable int id){
+//		taskService.joinToTask(task, id);
+//		return "redirect:/task/{id}";
+//	}
 	
 //	@GetMapping("/exit/{id}")
 //	public String exit(@ModelAttribute("task") Task task, @PathVariable int id){

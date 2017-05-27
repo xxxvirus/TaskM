@@ -3,6 +3,7 @@ package ua.com.task.entity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -41,6 +43,8 @@ public class User implements UserDetails {
 	private Customer customer;
 	@OneToOne(mappedBy = "user")
 	private Performer performer;
+	@OneToMany(mappedBy = "user")
+	private List<Report> reports = new ArrayList<>();
 
 	public int getId() {
 		return id;
@@ -128,6 +132,14 @@ public class User implements UserDetails {
 
 	public void setPerformer(Performer performer) {
 		this.performer = performer;
+	}
+
+	public List<Report> getReports() {
+		return reports;
+	}
+
+	public void setReports(List<Report> reports) {
+		this.reports = reports;
 	}
 
 	@Override

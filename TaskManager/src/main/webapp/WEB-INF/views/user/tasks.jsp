@@ -15,19 +15,20 @@
 	padding:5px;
 	margin-left:15px;
 }
+.infoRow {
+	color: #828282;
+}
 </style>
 <div class="row">
-	<sec:authorize access="isAuthenticated()">
-	<div class="col-md-12"><a href="/createTask"><button type="button" class="btn btn-danger btn-xs">Create Task</button></a></div>
-	</sec:authorize>
+	<div class="col-md-12"><h3>${users.name}'s created tasks: </h3></div>
 	<div class="col-md-8">
-	<table class="table table-condensed">
+	 	<table class="table table-condensed">
     <thead>
       <tr>
         <th>Date</th>
         <th>Title</th>
-        <th>Customer</th>
-        <th>Option</th>
+	    <th>Status</th>
+	    <th>Option</th>
       </tr>
     </thead>
     <tbody>
@@ -35,22 +36,34 @@
 	 	<tr>
 	 		<td>${task.date}</td>
 	 		<td><a href="/task/${task.id}">${task.title}</a></td>
-	 		<td><a href="/user/${task.customer.user.id}">${task.customer.user.name} ${task.customer.user.surname}</a></td>
 	 		<sec:authorize access="isAuthenticated()">
 	 		<sec:authentication property="principal.id" var="userId"/>
 			<c:if test="${userId == task.customer.user.id}">
-	 		<td><a class="btn btn-danger btn-xs" href="/deleteTask/${task.id}">delete</a>
-	 		<a class="btn btn-warning btn-xs" href="/editTask/${task.id}">edit</a></td>
+	 		<c:if test="${task.done==true}">
+	 			<td><a class="btn btn-success btn-xs" href="/user/${users.id}/tasks/open/${task.id}">Completed</a></td>
+	 		</c:if>
+	 		<c:if test="${task.done!=true}">
+	 			<td><a class="btn btn-danger btn-xs" href="/user/${users.id}/tasks/finish/${task.id}">Uncompleted</a></td>
+	 		</c:if>
+	 		<td><a class="btn btn-danger btn-xs" href="/user/${users.id}/deleteTask/${task.id}">delete</a>
+	 		<a class="btn btn-warning btn-xs" href="/user/${users.id}/editTask/${task.id}">edit</a></td>
+	 		</c:if>
+	 		<c:if test="${userId != task.customer.user.id}">
+	 		<c:if test="${task.done==true}">
+	 			<td><a class="btn btn-danger btn-xs" href="/task/${task.id}">Closed</a></td>
+	 		</c:if>
+	 		<c:if test="${task.done!=true}">
+	 			<td><a class="btn btn-success btn-xs" href="/task/${task.id}">Open</a></td>
 	 		</c:if>
 	 		<c:if test="${userId != task.customer.user.id}">
 	 		<td><a class="btn btn-primary btn-xs" href="/task/${task.id}">view</a></td>
+	 		</c:if>
 	 		</c:if>
 	 		</sec:authorize>
 	 	</tr>
 	 </c:forEach>
     </tbody>
   </table>
-	 
 	</div>
 	<sec:authorize access="isAuthenticated()">
 	<div class="col-md-4">
@@ -70,4 +83,5 @@
 		</div>
 	</div>
 	</sec:authorize>
+	
 </div>

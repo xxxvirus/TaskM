@@ -10,8 +10,12 @@ import ua.com.task.entity.Task;
 
 public interface TaskDao extends JpaRepository<Task, Integer> {
 
+	@Query("select t from Task t where t.done=false ORDER BY t.date DESC")
+	List<Task> findAllActive();
 	@Query("select t from Task t where t.customer.user.id=?1 ORDER BY t.date DESC")
 	List<Task> findByUserId(int id);
+	@Query("select t from Task t join t.performers p where p.user.id=?1")
+	List<Task> findByUserIdactive(int id);
 	
 	@Query("SELECT DISTINCT t FROM Task t LEFT JOIN FETCH t.performers WHERE "
 			+ "t.id=:id")
